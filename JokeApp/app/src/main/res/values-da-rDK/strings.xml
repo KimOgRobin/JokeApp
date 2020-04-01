@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">JokeApp</string>
+    <string name="show_jokes">Vis jokes</string>
+    <string name="new_joke">Ny Joke</string>
+    <string name="save_joke">Gem Joke</string>
+</resources>
