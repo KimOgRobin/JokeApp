@@ -51,26 +51,26 @@ public class MainActivity extends AppCompatActivity {
         thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                while(threadRunning){
+                while (threadRunning) {
                     Call<List<Joke>> jokeCall = jokeAPI.getTenJokes();
-                        jokeCall.enqueue(new Callback<List<Joke>>() {
-                            @Override
-                            public void onResponse(Call<List<Joke>> call, Response<List<Joke>> response) {
-                                List<Joke> jokeList = response.body();
-                                if(jokeList != null) {
-                                    for (Joke joke : jokeList) {
-                                        jokes.add(joke.toString());
-                                    }
+                    jokeCall.enqueue(new Callback<List<Joke>>() {
+                        @Override
+                        public void onResponse(Call<List<Joke>> call, Response<List<Joke>> response) {
+                            List<Joke> jokeList = response.body();
+                            if (jokeList != null) {
+                                for (Joke joke : jokeList) {
+                                    jokes.add(joke.toString());
                                 }
                             }
+                        }
 
-                            @Override
-                            public void onFailure(Call<List<Joke>> call, Throwable t) {
-                                Log.i("jokeAPP", "joke error");
-                            }
-                        });
+                        @Override
+                        public void onFailure(Call<List<Joke>> call, Throwable t) {
+                            Log.i("jokeAPP", "joke error");
+                        }
+                    });
 
-                        Log.i("jokeAPP", "thread cycle " + counter++);
+                    Log.i("jokeAPP", "thread cycle " + counter++);
 
                     try {
                         Thread.sleep(5000);
@@ -83,20 +83,22 @@ public class MainActivity extends AppCompatActivity {
         thread.start();
     }
 
-    public void newJoke(View view){
-        if(jokes.size() >= 1){
+    public void newJoke(View view) {
+        if (jokes.size() >= 1) {
             jokeText.setText(jokes.getFirst());
             jokes.removeFirst();
-        }else{
-            jokeText.setText("Loading jokes, try again later\n There is a 100 joke pr. 15 minutes limit on the Web API");
+        } else {
+            String message = getString(R.string.loading_jokes) + "\n" + getString(R.string.joke_limit);
+            Log.i("jokeAPP", message);
+            jokeText.setText(message);
         }
     }
 
-    public void saveJoke(View view){
+    public void saveJoke(View view) {
 
     }
 
-    public void showJokes(View view){
+    public void showJokes(View view) {
 
     }
 
@@ -118,6 +120,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         threadRunning = false;
+        Log.i("jokeAPP", "onDestroy");
         super.onDestroy();
         try {
             thread.join();
