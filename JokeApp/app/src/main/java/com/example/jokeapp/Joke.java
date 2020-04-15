@@ -7,19 +7,15 @@ import androidx.room.PrimaryKey;
 @Entity
 class Joke {
     @PrimaryKey(autoGenerate = true)
-    private int ID;
+    public int ID;
     @ColumnInfo(name = "setup")
-    private String setup;
+    public String setup;
     @ColumnInfo(name = "punchline")
-    private String punchline;
+    public String punchline;
     @ColumnInfo(name = "rating")
-    private float rating;
+    public float rating;
 
-    public Joke(String setup, String punchline, float rating){
-        this.setup = setup;
-        this.punchline = punchline;
-        this.rating = rating;
-    }
+
     public String getSetup() {
         return setup;
     }
@@ -35,6 +31,7 @@ class Joke {
     public int getID(){
         return ID;
     }
+
     public void setID(int ID){
         this.ID = ID;
     }

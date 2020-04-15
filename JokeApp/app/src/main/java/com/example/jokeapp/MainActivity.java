@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -11,6 +12,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 import retrofit2.Call;
 import retrofit2.Retrofit;
@@ -71,15 +74,33 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveJoke(View view){
-        String[] jokeParts = jokeText.toString().split("\n");
+        String[] jokeParts = jokeText.getText().toString().split("\n");
         String setup = jokeParts[0];
         String punchline = jokeParts[1];
+
         float rating = ratingBar.getRating();
-        Joke joke = new Joke(setup,punchline,rating);
-        jokeDao.insert(joke);
+        Joke joke = new Joke();
+        joke.setup = setup;
+        joke.punchline = punchline;
+        joke.rating = rating;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                jokeDao.insert(joke);
+            }
+        }).start();
+
     }
 
     public void showJokes(View view){
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Joke> savedJokes = jokeDao.getJokes();
+            }
+        }).start();
+
 
     }
 
