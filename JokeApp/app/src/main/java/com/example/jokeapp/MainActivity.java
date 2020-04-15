@@ -2,6 +2,7 @@ package com.example.jokeapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
 import android.os.Bundle;
 import android.util.Log;
@@ -22,6 +23,8 @@ public class MainActivity extends AppCompatActivity {
     private Thread thread;
     private TextView jokeText;
     private JokeService jokeAPI;
+    private AppDatabase jokeDatabase;
+    private JokeDao jokeDao;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,6 +39,9 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         jokeAPI = retrofit.create(JokeService.class);
+        jokeDatabase = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "jokeDatabase").build();
+        jokeDao = jokeDatabase.jokeDao();
     }
 
 
@@ -65,7 +71,12 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveJoke(View view){
-
+        String[] jokeParts = jokeText.toString().split("\n");
+        String setup = jokeParts[0];
+        String punchline = jokeParts[1];
+        float rating = ratingBar.getRating();
+        Joke joke = new Joke(setup,punchline,rating);
+        jokeDao.insert(joke);
     }
 
     public void showJokes(View view){
