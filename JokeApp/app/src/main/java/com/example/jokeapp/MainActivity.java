@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newJoke(View view) {
-        if (jokes.size() >= 1) {
+        if (!jokes.isEmpty()) {
             jokeText.setText(jokes.getFirst());
             jokes.removeFirst();
         } else {
