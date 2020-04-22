@@ -4,14 +4,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.room.Room;
 
+import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.util.Log;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
 
 import java.io.IOException;
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.LinkedList;
@@ -24,13 +27,12 @@ import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
 public class MainActivity extends AppCompatActivity {
-
+    public static final String JOKE_DATA = "com.example.jokeapp.JOKEDATA";
     private RatingBar ratingBar;
     private Retrofit retrofit;
     private Thread thread;
     private TextView jokeText;
     private JokeService jokeAPI;
-    private AppDatabase jokeDatabase;
     private JokeDao jokeDao;
     private boolean threadRunning;
     private LinkedList<String> jokes;
@@ -39,11 +41,13 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        threadRunning = true;
-        jokes = new LinkedList<>();
         setContentView(R.layout.activity_main);
         jokeText = findViewById(R.id.jokeText);
         ratingBar = findViewById(R.id.ratingBar);
+        threadRunning = true;
+        jokes = new LinkedList<>();
+        jokeDao = JokeDatabase.getInstance(this).jokeDao();
+
 
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://official-joke-api.appspot.com/")
@@ -51,9 +55,7 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         jokeAPI = retrofit.create(JokeService.class);
-        jokeDatabase = Room.databaseBuilder(getApplicationContext(),
-                AppDatabase.class, "jokeDatabase").build();
-        jokeDao = jokeDatabase.jokeDao();
+
 
         thread = new Thread(new Runnable() {
             @Override
@@ -121,15 +123,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void showJokes(View view) {
-
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                List<Joke> savedJokes = jokeDao.getJokes();
-            }
-        }).start();
-
-
+        Intent intent = new Intent(this, JokeList.class);
+        startActivity(intent);
     }
 
     @Override
