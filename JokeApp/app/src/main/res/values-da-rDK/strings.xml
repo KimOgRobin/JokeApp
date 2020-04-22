@@ -4,4 +4,6 @@
     <string name="show_jokes">Vis jokes</string>
     <string name="new_joke">Ny Joke</string>
     <string name="save_joke">Gem Joke</string>
+    <string name="loading_jokes">Indlæser jokes, prøv igen senere</string>
+    <string name="joke_limit">Der er en 100 jokes pr. kvarter begrænsning på Web API\'et</string>
 </resources>
