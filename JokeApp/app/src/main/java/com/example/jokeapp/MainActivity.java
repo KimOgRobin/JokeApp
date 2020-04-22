@@ -104,22 +104,23 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void saveJoke(View view){
-        String[] jokeParts = jokeText.getText().toString().split("\n");
-        String setup = jokeParts[0];
-        String punchline = jokeParts[1];
+        if(jokeText.getText() != "") {
+            String[] jokeParts = jokeText.getText().toString().split("\n");
+            String setup = jokeParts[0];
+            String punchline = jokeParts[1];
 
-        float rating = ratingBar.getRating();
-        Joke joke = new Joke();
-        joke.setup = setup;
-        joke.punchline = punchline;
-        joke.rating = rating;
-        new Thread(new Runnable() {
-            @Override
-            public void run() {
-                jokeDao.insert(joke);
-            }
-        }).start();
-
+            float rating = ratingBar.getRating();
+            Joke joke = new Joke();
+            joke.setup = setup;
+            joke.punchline = punchline;
+            joke.rating = rating;
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    jokeDao.insert(joke);
+                }
+            }).start();
+        }
     }
 
     public void showJokes(View view) {

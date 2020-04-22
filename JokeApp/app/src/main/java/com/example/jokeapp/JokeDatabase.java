@@ -1,6 +1,7 @@
 package com.example.jokeapp;
 
 import android.content.Context;
+import android.util.Log;
 
 import androidx.room.Database;
 import androidx.room.Room;
@@ -12,6 +13,7 @@ public abstract class JokeDatabase extends RoomDatabase {
     private static JokeDatabase INSTANCE;
 
     public static JokeDatabase getInstance(Context context){
+        Log.i("jokeAPP", "JokeDatabase getInstance");
         if(INSTANCE == null){
             INSTANCE = Room.databaseBuilder(context.getApplicationContext(),
                     JokeDatabase.class, "jokeDatabase").build();
