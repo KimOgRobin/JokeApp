@@ -2,7 +2,9 @@ package com.example.jokeapp;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.room.Room;
 
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -28,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
     private Thread thread;
     private TextView jokeText;
     private JokeService jokeAPI;
+    private AppDatabase jokeDatabase;
+    private JokeDao jokeDao;
     private boolean threadRunning;
     private LinkedList<String> jokes;
     private int counter = 1;
@@ -47,6 +51,9 @@ public class MainActivity extends AppCompatActivity {
                 .build();
 
         jokeAPI = retrofit.create(JokeService.class);
+        jokeDatabase = Room.databaseBuilder(getApplicationContext(),
+                AppDatabase.class, "jokeDatabase").build();
+        jokeDao = jokeDatabase.jokeDao();
 
         thread = new Thread(new Runnable() {
             @Override
@@ -94,11 +101,34 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    public void saveJoke(View view) {
+    public void saveJoke(View view){
+        String[] jokeParts = jokeText.getText().toString().split("\n");
+        String setup = jokeParts[0];
+        String punchline = jokeParts[1];
+
+        float rating = ratingBar.getRating();
+        Joke joke = new Joke();
+        joke.setup = setup;
+        joke.punchline = punchline;
+        joke.rating = rating;
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                jokeDao.insert(joke);
+            }
+        }).start();
 
     }
 
     public void showJokes(View view) {
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                List<Joke> savedJokes = jokeDao.getJokes();
+            }
+        }).start();
+
 
     }
 
