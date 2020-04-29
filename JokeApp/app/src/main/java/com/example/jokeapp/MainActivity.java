@@ -9,9 +9,11 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.View;
 import android.widget.RatingBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.IOException;
 import java.io.Serializable;
@@ -61,25 +63,27 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void run() {
                 while (threadRunning) {
-                    Call<List<Joke>> jokeCall = jokeAPI.getTenJokes();
-                    jokeCall.enqueue(new Callback<List<Joke>>() {
-                        @Override
-                        public void onResponse(Call<List<Joke>> call, Response<List<Joke>> response) {
-                            List<Joke> jokeList = response.body();
-                            if (jokeList != null) {
-                                for (Joke joke : jokeList) {
-                                    jokes.add(joke.toString());
+                    if(jokes.size() < 50) {
+                        Call<List<Joke>> jokeCall = jokeAPI.getTenJokes();
+                        Log.i("jokeAPP", "joke get request - jokelist size = " + jokes.size());
+                        jokeCall.enqueue(new Callback<List<Joke>>() {
+                            @Override
+                            public void onResponse(Call<List<Joke>> call, Response<List<Joke>> response) {
+                                List<Joke> jokeList = response.body();
+                                if (jokeList != null) {
+                                    for (Joke joke : jokeList) {
+                                        jokes.add(joke.toString());
+                                    }
                                 }
                             }
-                        }
 
-                        @Override
-                        public void onFailure(Call<List<Joke>> call, Throwable t) {
-                            Log.i("jokeAPP", "joke error");
-                        }
-                    });
-
-                    Log.i("jokeAPP", "thread cycle " + counter++);
+                            @Override
+                            public void onFailure(Call<List<Joke>> call, Throwable t) {
+                                Log.i("jokeAPP", "joke error");
+                            }
+                        });
+                    }
+                    Log.i("jokeAPP", "thread cycle " + counter++ + " jokelist size = "+ jokes.size());
 
                     try {
                         Thread.sleep(5000);
@@ -121,6 +125,9 @@ public class MainActivity extends AppCompatActivity {
                     jokeDao.insert(joke);
                 }
             }).start();
+            Toast savingToast = Toast.makeText(this, getString(R.string.saving_joke) ,Toast.LENGTH_SHORT);
+            savingToast.setGravity(Gravity.CENTER,0,200);
+            savingToast.show();
         }
     }
 

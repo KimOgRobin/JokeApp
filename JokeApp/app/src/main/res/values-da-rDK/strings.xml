@@ -7,4 +7,5 @@
     <string name="loading_jokes">Indlæser jokes, prøv igen senere</string>
     <string name="joke_limit">Der er en 100 jokes pr. kvarter begrænsning på Web API\'et</string>
     <string name="delete">Slet</string>
+    <string name="saving_joke">Gemmer joke</string>
 </resources>
