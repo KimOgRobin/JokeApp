@@ -45,7 +45,7 @@ public class JokeList extends AppCompatActivity {
         layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new JokeAdapter(jokeData);
+        adapter = new JokeAdapter(jokeData, this.getApplicationContext());
         recyclerView.setAdapter(adapter);
 
     }

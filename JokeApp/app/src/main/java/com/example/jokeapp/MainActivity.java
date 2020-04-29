@@ -93,6 +93,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     public void newJoke(View view) {
+        ratingBar.setRating(0);
         if (!jokes.isEmpty()) {
             jokeText.setText(jokes.getFirst());
             jokes.removeFirst();
