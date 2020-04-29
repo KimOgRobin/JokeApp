@@ -74,6 +74,10 @@ public class MainActivity extends AppCompatActivity {
                                     for (Joke joke : jokeList) {
                                         jokes.add(joke.toString());
                                     }
+                                    if(jokeText.getText().equals("") && !jokes.isEmpty()){
+                                        jokeText.setText(jokes.getFirst());
+                                        jokes.removeFirst();
+                                    }
                                 }
                             }
 
