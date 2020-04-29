@@ -23,6 +23,9 @@ public interface JokeDao {
     @Query("DELETE FROM Joke WHERE ID = :ID")
     void delete(int ID);
 
+    @Delete
+    void delete (Joke joke);
+
     @Update
     int update(Joke joke);
 }
