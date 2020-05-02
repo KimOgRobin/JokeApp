@@ -63,7 +63,23 @@ public class JokeAdapter extends RecyclerView.Adapter<JokeAdapter.JokeViewHolder
         });
 
         holder.ratingBar.setRating(savedJokes.get(position).rating);
+        holder.deleteButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Thread dbDeleteThread = new Thread(new Runnable() {
+                    @Override
+                    public void run() {
+                        //Log.i("jokeAPP","delete position " + position + " joke: " + savedJokes.get(position));
+                        JokeDatabase.getInstance(contextForDb).jokeDao().delete(savedJokes.get(position));
+                        savedJokes.remove(position);
+                        notifyItemRemoved(position);
+                        notifyItemRangeChanged(position, savedJokes.size());
+                    }
+                });
+                dbDeleteThread.start();
 
+            }
+        });
 
 
     }
