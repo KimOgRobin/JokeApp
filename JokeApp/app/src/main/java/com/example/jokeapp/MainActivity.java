@@ -1,13 +1,7 @@
 package com.example.jokeapp;
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
 import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Parcelable;
 import android.util.Log;
 import android.view.Gravity;
 import android.view.View;
@@ -15,10 +9,8 @@ import android.widget.RatingBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import java.io.IOException;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Arrays;
+import androidx.appcompat.app.AppCompatActivity;
+
 import java.util.LinkedList;
 import java.util.List;
 
@@ -50,14 +42,12 @@ public class MainActivity extends AppCompatActivity {
         jokes = new LinkedList<>();
         jokeDao = JokeDatabase.getInstance(this).jokeDao();
 
-
         retrofit = new Retrofit.Builder()
                 .baseUrl("https://official-joke-api.appspot.com/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
 
         jokeAPI = retrofit.create(JokeService.class);
-
 
         thread = new Thread(new Runnable() {
             @Override
@@ -75,8 +65,10 @@ public class MainActivity extends AppCompatActivity {
                                         jokes.add(joke.toString());
                                     }
                                     if(jokeText.getText().equals("") && !jokes.isEmpty()){
+                                        jokeText.setVisibility(View.INVISIBLE);
                                         jokeText.setText(jokes.getFirst());
                                         jokes.removeFirst();
+                                        jokeText.setVisibility(View.VISIBLE);
                                     }
                                 }
                             }
@@ -102,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
 
     public void newJoke(View view) {
         ratingBar.setRating(0);
+        jokeText.setVisibility(View.INVISIBLE);
         if (!jokes.isEmpty()) {
             jokeText.setText(jokes.getFirst());
             jokes.removeFirst();
@@ -110,6 +103,7 @@ public class MainActivity extends AppCompatActivity {
             Log.i("jokeAPP", message);
             jokeText.setText(message);
         }
+        jokeText.setVisibility(View.VISIBLE);
     }
 
     public void saveJoke(View view){
