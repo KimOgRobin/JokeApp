@@ -20,9 +20,6 @@ public interface JokeDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     void insert(Joke joke);
 
-    @Query("DELETE FROM Joke WHERE ID = :ID")
-    void delete(int ID);
-
     @Delete
     void delete (Joke joke);
 
