@@ -5,4 +5,6 @@
     <string name="save_joke">Save Joke</string>
     <string name="loading_jokes">Loading jokes, try again later</string>
     <string name="joke_limit">There is a 100 joke pr. 15 minutes limit on the Web API</string>
+    <string name="delete">Delete</string>
+    <string name="saving_joke">Saving joke</string>
 </resources>
